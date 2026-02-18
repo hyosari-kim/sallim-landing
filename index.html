@@ -545,33 +545,57 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // Form submit handler (placeholder)
-    function handleSubmit(e, form) {
+    // Google Sheets Apps Script endpoint
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6fNFUQy0oaQ26TJfBUefVyOmJ-FyTFKqlwPTHfJn2_vAEsMuEnhTlq_7FEtYNnuUY/exec';
+
+    // Form submit handler
+    async function handleSubmit(e, form) {
       e.preventDefault();
       const email = form.querySelector('input[type="email"]').value;
       const button = form.querySelector('button[type="submit"]');
       const originalHTML = button.innerHTML;
 
-      // Success state
+      // Loading state
       button.innerHTML = `
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
         </svg>
-        신청 완료!
+        신청 중...
       `;
       button.disabled = true;
-      button.classList.add('opacity-75');
-      form.querySelector('input[type="email"]').value = '';
 
-      // Reset after 3s
-      setTimeout(() => {
-        button.innerHTML = originalHTML;
-        button.disabled = false;
-        button.classList.remove('opacity-75');
-      }, 3000);
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
 
-      // TODO: Connect to backend API
-      console.log('Access requested:', email);
+        // Success state
+        button.innerHTML = `
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+          </svg>
+          신청 완료!
+        `;
+        button.classList.add('opacity-75');
+        form.querySelector('input[type="email"]').value = '';
+
+        setTimeout(() => {
+          button.innerHTML = originalHTML;
+          button.disabled = false;
+          button.classList.remove('opacity-75');
+        }, 3000);
+      } catch (err) {
+        // Error state
+        button.innerHTML = '다시 시도해 주세요';
+        setTimeout(() => {
+          button.innerHTML = originalHTML;
+          button.disabled = false;
+        }, 2000);
+      }
     }
   </script>
 
