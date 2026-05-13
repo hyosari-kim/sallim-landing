@@ -3,131 +3,272 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>프리실라 — 교회 관리의 새로운 방식</title>
-  <meta name="description" content="교인 관리, 재정, 출석을 하나의 플랫폼에서. AI가 함께하는 스마트한 교회 관리 시스템.">
+  <title>살림 — 가정교회 운영 시스템</title>
+  <meta name="description" content="목장, VIP, 삶공부, 초원, 그리고 교회 행정까지. 가정교회 한 가지를 위해 만들어진 시스템.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            stone: {
-              50: '#faf9f7',
-              100: '#f3f1ed',
-              200: '#e8e4dd',
-              300: '#d5cfc4',
-              400: '#b8af9f',
-              500: '#9a8f7d',
-              600: '#7d7264',
-              700: '#5e554a',
-              800: '#433d35',
-              900: '#2d2923',
-              950: '#1a1815',
-            },
-            accent: {
-              50: '#fdf5f0',
-              100: '#fbe8dc',
-              200: '#f5cab0',
-              300: '#eda67c',
-              400: '#e2804c',
-              500: '#c4602e',
-              600: '#a34a22',
-              700: '#7d3819',
-              800: '#5c2a14',
-              900: '#3d1c0e',
-            },
+            paper:   { 50: '#fbf7ee', 100: '#f5efe1', 200: '#ece3cd', 300: '#ddd0b3' },
+            ink:     { 950: '#15110c', 900: '#1f1a13', 800: '#2e2820', 700: '#42392d', 600: '#5c5141', 500: '#7a6e5b', 400: '#9a8e7a', 300: '#b8ad97' },
+            line:    { DEFAULT: '#dccfb3', soft: '#ebe2cd' },
+            seal:    { 50: '#fbeeea', 100: '#f5d6cf', 200: '#e6a298', 400: '#c4503f', 500: '#a8362d', 600: '#8a2a22', 700: '#6a1f1a', 900: '#3e110d' },
           },
           fontFamily: {
-            sans: ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'system-ui', 'sans-serif'],
+            display: ['"Gowun Batang"', 'serif'],
+            sans:    ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'system-ui', 'sans-serif'],
           },
         },
       },
     }
   </script>
+
   <style>
-    /* Smooth scroll */
     html { scroll-behavior: smooth; }
 
-    /* Floating nav blur */
+    body {
+      background-color: #fbf7ee;
+      /* very subtle hanji-paper grain */
+      background-image:
+        radial-gradient(rgba(58, 47, 30, 0.025) 1px, transparent 1px),
+        radial-gradient(rgba(58, 47, 30, 0.018) 1px, transparent 1px);
+      background-size: 3px 3px, 7px 7px;
+      background-position: 0 0, 1px 2px;
+    }
+
+    /* Display kerning for Korean serif */
+    .font-display { letter-spacing: -0.035em; }
+
+    /* Nav blur */
     .nav-blur {
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
     }
 
-    /* Subtle entrance animations */
+    /* Entrance animations */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .animate-fade-up {
-      animation: fadeUp 0.7s ease-out forwards;
-    }
-    .animate-delay-1 { animation-delay: 0.1s; }
-    .animate-delay-2 { animation-delay: 0.2s; }
-    .animate-delay-3 { animation-delay: 0.3s; }
-    .animate-delay-4 { animation-delay: 0.4s; }
+    .animate-fade-up { animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    .d-1 { animation-delay: 0.08s; }
+    .d-2 { animation-delay: 0.18s; }
+    .d-3 { animation-delay: 0.28s; }
+    .d-4 { animation-delay: 0.42s; }
+    .d-5 { animation-delay: 0.56s; }
 
-    /* Scroll-triggered fade */
-    .reveal {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
-    /* Bento card hover */
-    .bento-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Seal stamp — 살림 낙관 */
+    .seal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #a8362d;
+      color: #fbf7ee;
+      font-family: 'Gowun Batang', serif;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      box-shadow: inset 0 0 0 1.5px rgba(251, 247, 238, 0.18), 0 1px 0 rgba(0,0,0,0.04);
+      transform: rotate(-2deg);
     }
-    .bento-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.08);
-    }
+    .seal-sm { width: 1.05em; height: 1.05em; font-size: 0.55em; border-radius: 2px; vertical-align: 0.05em; }
+    .seal-lg { width: 84px; height: 84px; font-size: 32px; border-radius: 4px; }
+    .seal-xl { width: 120px; height: 120px; font-size: 46px; border-radius: 6px; }
 
-    /* Number badge */
-    .num-badge {
-      font-variant-numeric: tabular-nums;
-    }
+    /* Hairline underlines */
+    .rule { background: linear-gradient(to right, transparent, #c8b894 20%, #c8b894 80%, transparent); height: 1px; }
 
-    /* Mockup shimmer placeholder */
-    .mockup-placeholder {
-      background: linear-gradient(135deg, #f3f1ed 0%, #e8e4dd 50%, #f3f1ed 100%);
-      background-size: 200% 200%;
-      animation: shimmer 3s ease-in-out infinite;
-    }
-    @keyframes shimmer {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+    /* Chapter marker */
+    .chapter-num {
+      font-family: 'Gowun Batang', serif;
+      font-feature-settings: "tnum";
+      color: #a8362d;
+      letter-spacing: 0.04em;
     }
 
-    /* Input focus ring */
+    /* Card surface */
+    .surface {
+      background: #ffffff;
+      border: 1px solid #ebe2cd;
+      box-shadow: 0 1px 0 rgba(58, 47, 30, 0.02);
+    }
+    .surface-warm { background: #fdfaf3; border: 1px solid #ebe2cd; }
+    .surface:hover, .feature-card:hover { box-shadow: 0 24px 60px -28px rgba(58, 47, 30, 0.18); }
+    .feature-card { transition: box-shadow 0.4s ease, transform 0.4s ease; }
+    .feature-card:hover { transform: translateY(-3px); }
+
+    /* Pill */
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      font-size: 11px; font-weight: 500;
+      border: 1px solid #dccfb3;
+      background: #fdfaf3;
+      border-radius: 999px;
+      letter-spacing: 0.06em;
+      color: #5c5141;
+    }
+    .pill .dot { width: 5px; height: 5px; background: #a8362d; border-radius: 999px; }
+
+    /* Input focus */
+    .email-input { transition: box-shadow 0.2s ease, border-color 0.2s ease; }
     .email-input:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(196, 96, 46, 0.15);
+      border-color: #a8362d;
+      box-shadow: 0 0 0 3px rgba(168, 54, 45, 0.12);
     }
 
-    /* Section pill */
-    .section-pill {
-      letter-spacing: 0.05em;
+    /* Vertical rule with character */
+    .v-rule {
+      writing-mode: vertical-rl;
+      letter-spacing: 0.4em;
+      font-family: 'Gowun Batang', serif;
+    }
+
+    /* Tabular nums */
+    .tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+    /* Manifesto block */
+    .manifesto p { line-height: 1.95; }
+
+    /* Mockup paper feel */
+    .mockup-frame {
+      background: linear-gradient(135deg, #f5efe1 0%, #ece3cd 100%);
+      border: 1px solid #dccfb3;
+    }
+
+    /* Tiny stage badge (for VIP) */
+    .stage-dot { width: 6px; height: 6px; border-radius: 999px; display: inline-block; }
+
+    /* Progress bar */
+    .pbar { background: #f0e9d6; border-radius: 999px; overflow: hidden; }
+    .pbar > span { display: block; height: 100%; background: #a8362d; }
+
+    /* Tag */
+    .tag {
+      display: inline-flex; align-items: center;
+      padding: 2px 6px; font-size: 10px;
+      border-radius: 3px;
+      font-weight: 500;
+    }
+
+    /* Subtle ornament — vertical ko character "家" lightly */
+    .ornament-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(ellipse at top right, rgba(168, 54, 45, 0.04), transparent 60%);
+    }
+
+    /* Selection */
+    ::selection { background: #a8362d; color: #fbf7ee; }
+
+    /* ── Preview slideshow ───────────────── */
+    .slide-tab {
+      font-family: inherit;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: #fdfaf3;
+      border: 1px solid #dccfb3;
+      color: #5c5141;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .slide-tab:hover { background: #ffffff; border-color: #b8ad97; }
+    .slide-tab.is-active {
+      background: #1f1a13;
+      border-color: #1f1a13;
+      color: #fbf7ee;
+    }
+
+    .preview-slide {
+      position: absolute;
+      inset: 0;
+      padding: 1.25rem 1.25rem;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    @media (min-width: 640px) {
+      .preview-slide { padding: 1.5rem; }
+    }
+    .preview-slide.is-active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .side-item {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.5rem 0.625rem;
+      font-size: 12px;
+      color: #7a6e5b;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+      cursor: pointer;
+    }
+    .side-item .ic {
+      width: 14px;
+      height: 14px;
+      background: #dccfb3;
+      border-radius: 3px;
+      transition: background 0.25s;
+    }
+    .side-item.is-active {
+      background: #ffffff;
+      color: #2e2820;
+      font-weight: 500;
+      border-color: rgba(235, 226, 205, 0.7);
+    }
+    .side-item.is-active .ic { background: #a8362d; }
+
+    /* VIP kanban card */
+    .vip-card {
+      background: #ffffff;
+      border: 1px solid #ebe2cd;
+      border-radius: 6px;
+      padding: 7px 9px;
+      margin-bottom: 6px;
+    }
+    .vip-card.hi {
+      border-color: #f5d6cf;
+      background: #fbeeea;
     }
   </style>
 </head>
-<body class="bg-stone-50 text-stone-800 font-sans antialiased">
+<body class="text-ink-800 font-sans antialiased">
 
   <!-- ============================================ -->
-  <!-- 1. Floating Navigation                       -->
+  <!-- Nav                                          -->
   <!-- ============================================ -->
-  <nav class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-3xl">
-    <div class="nav-blur bg-white/80 border border-stone-200/60 rounded-2xl px-5 py-3 flex items-center justify-between shadow-sm">
-      <a href="#" class="font-sans font-bold text-lg text-stone-900 tracking-tight">프리실라</a>
-      <a href="#request-access"
-         class="inline-flex items-center gap-1.5 bg-stone-900 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-stone-800 transition-colors">
-        Request Access
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+  <nav class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-3xl">
+    <div class="nav-blur bg-paper-50/85 border border-line-soft rounded-full pl-5 pr-2 py-2 flex items-center justify-between">
+      <a href="#" class="flex items-center group">
+        <span class="font-display font-bold text-[19px] text-ink-900 tracking-tight">살림<span class="text-seal-500">.</span></span>
+      </a>
+      <a href="#request" class="inline-flex items-center gap-1.5 bg-ink-900 text-paper-50 text-[13px] font-medium px-4 py-2 rounded-full hover:bg-ink-800 transition-colors">
+        사용 신청
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
         </svg>
       </a>
@@ -135,381 +276,124 @@
   </nav>
 
   <!-- ============================================ -->
-  <!-- 2. Hero + Access Request Form                -->
+  <!-- Hero — editorial, asymmetric                  -->
   <!-- ============================================ -->
-  <section id="request-access" class="relative min-h-screen flex items-center justify-center px-6 pt-28 pb-20">
-    <div class="max-w-2xl mx-auto text-center">
-      <!-- Tagline pill -->
-      <div class="animate-fade-up inline-flex items-center gap-2 bg-accent-50 border border-accent-200/60 text-accent-600 text-xs font-medium px-3.5 py-1.5 rounded-full mb-8 section-pill">
-        <span class="w-1.5 h-1.5 bg-accent-500 rounded-full"></span>
-        Early Access 신청 중
-      </div>
+  <section class="relative min-h-screen px-6 sm:px-10 pt-32 pb-20 overflow-hidden ornament-bg">
+    <div class="max-w-6xl mx-auto">
 
-      <!-- Headline -->
-      <h1 class="animate-fade-up animate-delay-1 font-sans text-5xl sm:text-6xl md:text-7xl font-bold text-stone-950 leading-[1.05] tracking-tight mb-6">
-        교회 관리의 새로운 방식
-      </h1>
-
-      <!-- Subtitle -->
-      <p class="animate-fade-up animate-delay-2 text-stone-500 text-lg sm:text-xl leading-relaxed max-w-xl mx-auto mb-10">
-        교인 관리, 재정, 출석을 하나의 플랫폼에서. AI가 함께하는 스마트한 교회 관리 시스템.
-      </p>
-
-      <!-- Email form -->
-      <form class="animate-fade-up animate-delay-3 flex flex-col sm:flex-row items-center gap-3 max-w-md mx-auto mb-4"
-            onsubmit="handleSubmit(event, this)">
-        <input type="email" required placeholder="이메일 주소를 입력하세요"
-               class="email-input w-full sm:flex-1 bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-800 placeholder:text-stone-400 transition-shadow">
-        <button type="submit"
-                class="w-full sm:w-auto whitespace-nowrap bg-accent-500 hover:bg-accent-600 text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
-          Access 신청
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
-          </svg>
-        </button>
-      </form>
-      <p class="animate-fade-up animate-delay-4 text-stone-400 text-xs">
-        사용을 원하시면 신청해 주세요. 순서대로 초대해 드립니다.
-      </p>
-    </div>
-
-    <!-- Subtle decorative gradient -->
-    <div class="absolute inset-0 -z-10 overflow-hidden">
-      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-accent-100/30 rounded-full blur-[120px]"></div>
-    </div>
-  </section>
-
-  <!-- ============================================ -->
-  <!-- 3. Features — Bento Grid                     -->
-  <!-- ============================================ -->
-  <section class="px-6 py-24 sm:py-32">
-    <div class="max-w-5xl mx-auto">
-      <!-- Section header -->
-      <div class="reveal text-center mb-16">
-        <span class="inline-flex items-center gap-2 bg-white border border-stone-200 text-stone-600 text-xs font-medium px-3.5 py-1.5 rounded-full mb-6 section-pill">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/>
-          </svg>
-          주요 기능
+      <!-- Top label row -->
+      <div class="animate-fade-up flex items-center justify-between mb-12 sm:mb-16">
+        <span class="pill">
+          <span class="dot"></span>
+          가정교회 운영 시스템 · v0.1 Early Access
         </span>
-        <h2 class="font-sans text-3xl sm:text-4xl md:text-5xl font-bold text-stone-950 tracking-tight leading-tight">
-          교회에 필요한 모든 것,<br>하나의 플랫폼에서
-        </h2>
-      </div>
-
-      <!-- Bento Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-
-        <!-- Card 01: 교인 관리 -->
-        <div class="reveal bento-card bg-white rounded-2xl border border-stone-200/60 overflow-hidden">
-          <div class="p-6 sm:p-8">
-            <span class="num-badge inline-flex items-center justify-center w-8 h-8 bg-stone-100 text-stone-500 text-xs font-semibold rounded-lg mb-4">01</span>
-            <h3 class="font-sans text-xl sm:text-2xl font-bold text-stone-900 mb-2">교인 관리</h3>
-            <p class="text-stone-500 text-sm leading-relaxed">교인 정보, 가족 관계, 부서 배치를 체계적으로 관리하세요. 검색과 필터로 원하는 정보를 빠르게 찾을 수 있습니다.</p>
-          </div>
-          <!-- Mockup placeholder -->
-          <div class="mx-6 sm:mx-8 mb-6 sm:mb-8 rounded-xl overflow-hidden border border-stone-100">
-            <div class="mockup-placeholder h-48 sm:h-56 flex items-end justify-center p-4">
-              <!-- Mini member list mockup -->
-              <div class="w-full max-w-sm bg-white/90 rounded-lg shadow-sm border border-stone-100 overflow-hidden">
-                <div class="px-4 py-2.5 border-b border-stone-100 flex items-center justify-between">
-                  <span class="text-xs font-medium text-stone-600">교인 목록</span>
-                  <span class="text-[10px] text-stone-400">248명</span>
-                </div>
-                <div class="divide-y divide-stone-50">
-                  <div class="px-4 py-2 flex items-center gap-3">
-                    <div class="w-7 h-7 bg-accent-100 rounded-full flex items-center justify-center text-[10px] font-bold text-accent-600">김</div>
-                    <div><div class="text-xs font-medium text-stone-700">김영희</div><div class="text-[10px] text-stone-400">장로 · 1남선교회</div></div>
-                    <span class="ml-auto text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded">재적</span>
-                  </div>
-                  <div class="px-4 py-2 flex items-center gap-3">
-                    <div class="w-7 h-7 bg-blue-50 rounded-full flex items-center justify-center text-[10px] font-bold text-blue-500">박</div>
-                    <div><div class="text-xs font-medium text-stone-700">박성민</div><div class="text-[10px] text-stone-400">집사 · 청년부</div></div>
-                    <span class="ml-auto text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded">재적</span>
-                  </div>
-                  <div class="px-4 py-2 flex items-center gap-3">
-                    <div class="w-7 h-7 bg-purple-50 rounded-full flex items-center justify-center text-[10px] font-bold text-purple-500">이</div>
-                    <div><div class="text-xs font-medium text-stone-700">이준호</div><div class="text-[10px] text-stone-400">권사 · 2남선교회</div></div>
-                    <span class="ml-auto text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded">재적</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 02: 재정 관리 -->
-        <div class="reveal bento-card bg-white rounded-2xl border border-stone-200/60 overflow-hidden">
-          <div class="p-6 sm:p-8">
-            <span class="num-badge inline-flex items-center justify-center w-8 h-8 bg-stone-100 text-stone-500 text-xs font-semibold rounded-lg mb-4">02</span>
-            <h3 class="font-sans text-xl sm:text-2xl font-bold text-stone-900 mb-2">재정 관리</h3>
-            <p class="text-stone-500 text-sm leading-relaxed">헌금, 지출 내역을 투명하게 관리하고 기부금영수증을 간편하게 발급하세요. 국세청 양식을 완벽 지원합니다.</p>
-          </div>
-          <!-- Mockup placeholder -->
-          <div class="mx-6 sm:mx-8 mb-6 sm:mb-8 rounded-xl overflow-hidden border border-stone-100">
-            <div class="mockup-placeholder h-48 sm:h-56 flex items-end justify-center p-4">
-              <!-- Mini finance mockup -->
-              <div class="w-full max-w-sm bg-white/90 rounded-lg shadow-sm border border-stone-100 overflow-hidden">
-                <div class="px-4 py-2.5 border-b border-stone-100">
-                  <span class="text-xs font-medium text-stone-600">2월 헌금 현황</span>
-                </div>
-                <div class="p-4 space-y-3">
-                  <div class="flex items-baseline justify-between">
-                    <span class="text-[10px] text-stone-400">총 헌금액</span>
-                    <span class="text-lg font-bold text-stone-800">₩ 12,450,000</span>
-                  </div>
-                  <div class="flex gap-2">
-                    <div class="flex-1 bg-accent-50 rounded-lg p-2.5 text-center">
-                      <div class="text-[10px] text-stone-400 mb-0.5">십일조</div>
-                      <div class="text-xs font-bold text-stone-700">₩ 8,200,000</div>
-                    </div>
-                    <div class="flex-1 bg-blue-50 rounded-lg p-2.5 text-center">
-                      <div class="text-[10px] text-stone-400 mb-0.5">감사헌금</div>
-                      <div class="text-xs font-bold text-stone-700">₩ 3,100,000</div>
-                    </div>
-                    <div class="flex-1 bg-green-50 rounded-lg p-2.5 text-center">
-                      <div class="text-[10px] text-stone-400 mb-0.5">선교헌금</div>
-                      <div class="text-xs font-bold text-stone-700">₩ 1,150,000</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 03: 출석 관리 -->
-        <div class="reveal bento-card bg-white rounded-2xl border border-stone-200/60 overflow-hidden">
-          <div class="p-6 sm:p-8">
-            <span class="num-badge inline-flex items-center justify-center w-8 h-8 bg-stone-100 text-stone-500 text-xs font-semibold rounded-lg mb-4">03</span>
-            <h3 class="font-sans text-xl sm:text-2xl font-bold text-stone-900 mb-2">출석 관리</h3>
-            <p class="text-stone-500 text-sm leading-relaxed">주일예배, 수요예배, 새벽기도 등 모든 예배의 출석을 쉽게 체크하고 출석 현황을 한눈에 파악하세요.</p>
-          </div>
-          <!-- Mockup placeholder -->
-          <div class="mx-6 sm:mx-8 mb-6 sm:mb-8 rounded-xl overflow-hidden border border-stone-100">
-            <div class="mockup-placeholder h-48 sm:h-56 flex items-end justify-center p-4">
-              <!-- Mini attendance mockup -->
-              <div class="w-full max-w-sm bg-white/90 rounded-lg shadow-sm border border-stone-100 overflow-hidden">
-                <div class="px-4 py-2.5 border-b border-stone-100 flex items-center justify-between">
-                  <span class="text-xs font-medium text-stone-600">주일예배 출석</span>
-                  <span class="text-[10px] text-stone-400">2025.02.16</span>
-                </div>
-                <div class="p-4">
-                  <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-baseline gap-1.5">
-                      <span class="text-2xl font-bold text-stone-800">187</span>
-                      <span class="text-[10px] text-stone-400">/ 248명</span>
-                    </div>
-                    <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">75.4%</span>
-                  </div>
-                  <!-- Mini bar chart -->
-                  <div class="flex items-end gap-1 h-12">
-                    <div class="flex-1 bg-stone-200 rounded-sm" style="height: 60%"></div>
-                    <div class="flex-1 bg-stone-200 rounded-sm" style="height: 72%"></div>
-                    <div class="flex-1 bg-stone-200 rounded-sm" style="height: 68%"></div>
-                    <div class="flex-1 bg-accent-300 rounded-sm" style="height: 75%"></div>
-                    <div class="flex-1 bg-stone-100 rounded-sm" style="height: 0%"></div>
-                    <div class="flex-1 bg-stone-100 rounded-sm" style="height: 0%"></div>
-                    <div class="flex-1 bg-stone-100 rounded-sm" style="height: 0%"></div>
-                    <div class="flex-1 bg-stone-100 rounded-sm" style="height: 0%"></div>
-                  </div>
-                  <div class="flex justify-between mt-1">
-                    <span class="text-[8px] text-stone-300">1월</span>
-                    <span class="text-[8px] text-stone-400 font-medium">2월</span>
-                    <span class="text-[8px] text-stone-300">3월</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 04: AI 어시스턴트 -->
-        <div class="reveal bento-card bg-white rounded-2xl border border-stone-200/60 overflow-hidden">
-          <div class="p-6 sm:p-8">
-            <span class="num-badge inline-flex items-center justify-center w-8 h-8 bg-accent-50 text-accent-500 text-xs font-semibold rounded-lg mb-4">04</span>
-            <h3 class="font-sans text-xl sm:text-2xl font-bold text-stone-900 mb-2">AI 어시스턴트</h3>
-            <p class="text-stone-500 text-sm leading-relaxed">대화로 교회를 관리하세요. "청년부 소속 성도 알려줘" 한마디면 AI가 바로 찾아드립니다.</p>
-          </div>
-          <!-- Mockup placeholder -->
-          <div class="mx-6 sm:mx-8 mb-6 sm:mb-8 rounded-xl overflow-hidden border border-stone-100">
-            <div class="mockup-placeholder h-48 sm:h-56 flex items-end justify-center p-4">
-              <!-- Mini chat mockup -->
-              <div class="w-full max-w-sm bg-white/90 rounded-lg shadow-sm border border-stone-100 overflow-hidden">
-                <div class="px-4 py-2.5 border-b border-stone-100 flex items-center gap-2">
-                  <div class="w-5 h-5 bg-accent-100 rounded-full flex items-center justify-center">
-                    <svg class="w-3 h-3 text-accent-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z"/>
-                    </svg>
-                  </div>
-                  <span class="text-xs font-medium text-stone-600">프리실라 AI</span>
-                </div>
-                <div class="p-3 space-y-2.5">
-                  <!-- User message -->
-                  <div class="flex justify-end">
-                    <div class="bg-stone-100 rounded-xl rounded-br-sm px-3 py-1.5 max-w-[75%]">
-                      <p class="text-[11px] text-stone-700">청년부 소속 성도 알려줘</p>
-                    </div>
-                  </div>
-                  <!-- AI response -->
-                  <div class="flex justify-start">
-                    <div class="bg-accent-50 rounded-xl rounded-bl-sm px-3 py-1.5 max-w-[85%]">
-                      <p class="text-[11px] text-stone-700">청년부 소속 성도는 총 <span class="font-semibold">32명</span>입니다. 박성민 집사, 한지은 성도, 오현우 성도 외 29명이 등록되어 있습니다.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================ -->
-  <!-- 4. App Preview                               -->
-  <!-- ============================================ -->
-  <section class="px-6 py-24 sm:py-32">
-    <div class="max-w-5xl mx-auto">
-      <div class="reveal text-center mb-12">
-        <span class="inline-flex items-center gap-2 bg-white border border-stone-200 text-stone-600 text-xs font-medium px-3.5 py-1.5 rounded-full mb-6 section-pill">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"/>
-          </svg>
-          미리보기
+        <span class="hidden sm:flex items-center gap-3 text-[11px] text-ink-500 tnum">
+          <span>EST. 2026</span>
+          <span class="w-6 h-px bg-line"></span>
+          <span>SEOUL · KR</span>
         </span>
-        <h2 class="font-sans text-3xl sm:text-4xl md:text-5xl font-bold text-stone-950 tracking-tight leading-tight">
-          직관적이고 아름다운 인터페이스
-        </h2>
       </div>
 
-      <!-- Full-width app mockup -->
-      <div class="reveal rounded-2xl border border-stone-200/60 overflow-hidden bg-white shadow-sm">
-        <div class="mockup-placeholder aspect-[16/9] sm:aspect-[2/1] flex items-center justify-center">
-          <!-- App shell mockup -->
-          <div class="w-[90%] h-[85%] bg-white/80 rounded-xl shadow-lg border border-stone-100 overflow-hidden flex">
-            <!-- Sidebar -->
-            <div class="w-48 bg-stone-100/80 border-r border-stone-200/60 p-3 hidden sm:block">
-              <div class="mb-4">
-                <div class="font-sans text-sm font-bold text-stone-800 px-2 mb-3">프리실라</div>
-                <div class="text-[10px] text-stone-400 px-2 mb-1">은혜교회</div>
-              </div>
-              <div class="space-y-0.5">
-                <div class="flex items-center gap-2 px-2 py-1.5 bg-white rounded-md text-[11px] font-medium text-stone-700">
-                  <div class="w-3.5 h-3.5 bg-stone-300 rounded-sm"></div>교인 관리
-                </div>
-                <div class="flex items-center gap-2 px-2 py-1.5 text-[11px] text-stone-500">
-                  <div class="w-3.5 h-3.5 bg-stone-200 rounded-sm"></div>재정 관리
-                </div>
-                <div class="flex items-center gap-2 px-2 py-1.5 text-[11px] text-stone-500">
-                  <div class="w-3.5 h-3.5 bg-stone-200 rounded-sm"></div>출석 관리
-                </div>
-                <div class="flex items-center gap-2 px-2 py-1.5 text-[11px] text-stone-500">
-                  <div class="w-3.5 h-3.5 bg-stone-200 rounded-sm"></div>예배 관리
-                </div>
-                <div class="flex items-center gap-2 px-2 py-1.5 text-[11px] text-stone-500">
-                  <div class="w-3.5 h-3.5 bg-stone-200 rounded-sm"></div>설정
-                </div>
-              </div>
-            </div>
-            <!-- Main content area -->
-            <div class="flex-1 p-4">
-              <div class="flex items-center justify-between mb-4">
-                <div class="text-xs font-medium text-stone-700">교인 관리 <span class="text-stone-400">/ 전체 목록</span></div>
-                <div class="flex gap-1.5">
-                  <div class="w-16 h-6 bg-stone-100 rounded-md"></div>
-                  <div class="w-12 h-6 bg-accent-500/20 rounded-md"></div>
-                </div>
-              </div>
-              <!-- Table header -->
-              <div class="flex items-center gap-3 px-3 py-1.5 bg-stone-50 rounded-t-md border border-stone-100 text-[9px] text-stone-400 font-medium">
-                <span class="w-4 h-4 border border-stone-200 rounded-sm"></span>
-                <span class="flex-1">이름</span>
-                <span class="w-16">직분</span>
-                <span class="w-20">소속부서</span>
-                <span class="w-12">상태</span>
-              </div>
-              <!-- Table rows -->
-              <div class="border-x border-b border-stone-100 divide-y divide-stone-50 rounded-b-md">
-                <div class="flex items-center gap-3 px-3 py-2 text-[10px]">
-                  <span class="w-4 h-4 border border-stone-200 rounded-sm"></span>
-                  <span class="flex-1 font-medium text-stone-700">김영희</span>
-                  <span class="w-16 text-stone-500">장로</span>
-                  <span class="w-20 text-stone-500">1남선교회</span>
-                  <span class="w-12"><span class="bg-green-50 text-green-600 px-1 py-0.5 rounded text-[8px]">재적</span></span>
-                </div>
-                <div class="flex items-center gap-3 px-3 py-2 text-[10px]">
-                  <span class="w-4 h-4 border border-stone-200 rounded-sm"></span>
-                  <span class="flex-1 font-medium text-stone-700">박성민</span>
-                  <span class="w-16 text-stone-500">집사</span>
-                  <span class="w-20 text-stone-500">청년부</span>
-                  <span class="w-12"><span class="bg-green-50 text-green-600 px-1 py-0.5 rounded text-[8px]">재적</span></span>
-                </div>
-                <div class="flex items-center gap-3 px-3 py-2 text-[10px]">
-                  <span class="w-4 h-4 border border-stone-200 rounded-sm"></span>
-                  <span class="flex-1 font-medium text-stone-700">이준호</span>
-                  <span class="w-16 text-stone-500">권사</span>
-                  <span class="w-20 text-stone-500">2남선교회</span>
-                  <span class="w-12"><span class="bg-green-50 text-green-600 px-1 py-0.5 rounded text-[8px]">재적</span></span>
-                </div>
-                <div class="flex items-center gap-3 px-3 py-2 text-[10px]">
-                  <span class="w-4 h-4 border border-stone-200 rounded-sm"></span>
-                  <span class="flex-1 font-medium text-stone-700">최수진</span>
-                  <span class="w-16 text-stone-500">집사</span>
-                  <span class="w-20 text-stone-500">여전도회</span>
-                  <span class="w-12"><span class="bg-green-50 text-green-600 px-1 py-0.5 rounded text-[8px]">재적</span></span>
-                </div>
-                <div class="flex items-center gap-3 px-3 py-2 text-[10px]">
-                  <span class="w-4 h-4 border border-stone-200 rounded-sm"></span>
-                  <span class="flex-1 font-medium text-stone-700">정민우</span>
-                  <span class="w-16 text-stone-500">성도</span>
-                  <span class="w-20 text-stone-500">중고등부</span>
-                  <span class="w-12"><span class="bg-green-50 text-green-600 px-1 py-0.5 rounded text-[8px]">재적</span></span>
-                </div>
-              </div>
-            </div>
+      <!-- Headline grid -->
+      <div class="grid grid-cols-12 gap-6 sm:gap-10 items-end mb-10 sm:mb-14">
+
+        <!-- Left: vertical accent -->
+        <div class="hidden md:block col-span-1">
+          <div class="animate-fade-up d-1">
+            <div class="w-px h-32 bg-line ml-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Center: headline -->
+        <div class="col-span-12 md:col-span-8">
+          <h1 class="animate-fade-up d-2 font-display font-bold text-ink-950 leading-[1.04] text-[44px] sm:text-[68px] md:text-[88px] tracking-tight">
+            한 영혼을<br>
+            끝까지 돌보는 일에<br>
+            집중하세요<span class="text-seal-500">.</span>
+          </h1>
+        </div>
+
+        <!-- Right: vertical accent -->
+        <div class="hidden md:flex col-span-3 justify-end items-end pb-2">
+          <div class="animate-fade-up d-3 v-rule text-[11px] text-ink-500">
+            살림 · 가정교회
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ============================================ -->
-  <!-- 5. Bottom CTA                                -->
-  <!-- ============================================ -->
-  <section class="px-6 py-24 sm:py-32">
-    <div class="max-w-5xl mx-auto">
-      <div class="reveal relative bg-stone-950 rounded-3xl px-8 sm:px-16 py-16 sm:py-24 text-center overflow-hidden">
-        <!-- Background decoration -->
-        <div class="absolute inset-0 overflow-hidden">
-          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-accent-500/10 rounded-full blur-[100px]"></div>
-        </div>
+      <!-- Subhead + form -->
+      <div class="grid grid-cols-12 gap-6 sm:gap-10">
+        <div class="hidden md:block col-span-1"></div>
 
-        <div class="relative z-10">
-          <h2 class="font-sans text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
-            교회를 위해 만들었습니다
-          </h2>
-          <p class="text-stone-400 text-base sm:text-lg max-w-md mx-auto mb-10">
-            복잡한 교회 행정, 프리실라가 함께합니다.<br>
-            지금 Access를 신청하세요.
+        <div class="col-span-12 md:col-span-7">
+          <p class="animate-fade-up d-3 font-display text-ink-700 text-[19px] sm:text-[22px] leading-[1.7] mb-10 max-w-xl">
+            나머지는 살림이 합니다.<br>
+            <span class="text-ink-500">목장 운영, VIP 추적, 삶공부 진도, 초원 관리,<br>
+            그리고 교회 행정의 모든 일까지.</span>
           </p>
 
-          <!-- Email form (repeated) -->
-          <form class="flex flex-col sm:flex-row items-center gap-3 max-w-md mx-auto mb-4"
-                onsubmit="handleSubmit(event, this)">
-            <input type="email" required placeholder="이메일 주소를 입력하세요"
-                   class="email-input w-full sm:flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-sm text-white placeholder:text-stone-500 transition-shadow">
-            <button type="submit"
-                    class="w-full sm:w-auto whitespace-nowrap bg-accent-500 hover:bg-accent-400 text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
-              Request Access
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <form id="hero-form" class="animate-fade-up d-4 flex flex-col sm:flex-row gap-3 max-w-lg" onsubmit="handleSubmit(event, this)">
+            <input type="email" required placeholder="목회자 이메일 주소"
+                   class="email-input flex-1 bg-white border border-line rounded-xl px-4 py-3.5 text-[14px] text-ink-800 placeholder:text-ink-400">
+            <button type="submit" class="whitespace-nowrap bg-seal-500 hover:bg-seal-600 text-paper-50 text-[14px] font-semibold px-6 py-3.5 rounded-xl transition-colors inline-flex items-center justify-center gap-2">
+              사용 신청
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
               </svg>
             </button>
           </form>
-          <p class="text-stone-500 text-xs">
-            사용을 원하시면 신청해 주세요. 순서대로 초대해 드립니다.
+          <p class="animate-fade-up d-5 text-ink-400 text-[12px] mt-3">
+            가정교회를 시작했거나 시작을 준비 중인 교회를 우선 초청합니다.
+          </p>
+        </div>
+
+        <div class="col-span-12 md:col-span-4 flex md:justify-end items-center mt-6 md:mt-0">
+          <!-- Large wordmark anchor -->
+          <div class="animate-fade-up d-4 font-display font-bold text-[96px] sm:text-[120px] text-ink-950 leading-none tracking-tight">
+            살림<span class="text-seal-500">.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Soft ambient gradient -->
+    <div class="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-seal-100/30 blur-[160px] -z-10 pointer-events-none"></div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- Manifesto — why 살림                          -->
+  <!-- ============================================ -->
+  <section class="relative px-6 sm:px-10 py-28 sm:py-36 border-t border-line-soft">
+    <div class="max-w-4xl mx-auto">
+
+      <div class="reveal grid grid-cols-12 gap-6 mb-12">
+        <div class="col-span-12 md:col-span-3">
+          <div class="flex items-baseline gap-2.5">
+            <span class="text-[11px] tnum text-ink-500 font-semibold tracking-wider">01</span>
+            <span class="w-5 h-px bg-line"></span>
+            <span class="text-[12px] text-ink-500 uppercase tracking-[0.18em]">왜 살림인가</span>
+          </div>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <div class="rule mb-8"></div>
+          <p class="font-display text-[28px] sm:text-[36px] leading-[1.45] text-ink-900 mb-10 -tracking-tight">
+            기존의 교회 행정 도구로는,<br>
+            <span class="text-seal-500">'목장'을 담을 수 없습니다.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal grid grid-cols-12 gap-6 manifesto">
+        <div class="hidden md:block col-span-3"></div>
+        <div class="col-span-12 md:col-span-9 max-w-2xl space-y-6 text-[16px] text-ink-700">
+          <p>
+            가정교회를 시작한 교회들은 빠르게 깨닫습니다.
+            엑셀로 VIP를 추적하고, 단톡방으로 삶공부를 챙기고,
+            별도 시트에 초원 보고를 모으는 사이 — 정작 가장 중요한 일에서 멀어진다는 사실을.
+          </p>
+          <p>
+            살림은 일반 교회 관리 시스템이 아닙니다.
+            <span class="text-ink-900 font-medium">오직 가정교회 한 가지를 위해 만들어진 시스템</span>입니다.
           </p>
         </div>
       </div>
@@ -517,16 +401,810 @@
   </section>
 
   <!-- ============================================ -->
-  <!-- 6. Footer                                    -->
+  <!-- Features — chapter heading                    -->
   <!-- ============================================ -->
-  <footer class="px-6 py-12 border-t border-stone-200/60">
-    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <span class="font-sans font-bold text-stone-800">프리실라</span>
-        <span class="text-stone-300">|</span>
-        <a href="mailto:hello@pricilla.app" class="text-sm text-stone-400 hover:text-stone-600 transition-colors">hello@pricilla.app</a>
+  <section id="features" class="relative px-6 sm:px-10 py-24 sm:py-32 border-t border-line-soft">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Section header -->
+      <div class="reveal grid grid-cols-12 gap-6 mb-16">
+        <div class="col-span-12 md:col-span-3">
+          <div class="flex items-baseline gap-2.5">
+            <span class="text-[11px] tnum text-ink-500 font-semibold tracking-wider">02</span>
+            <span class="w-5 h-px bg-line"></span>
+            <span class="text-[12px] text-ink-500 uppercase tracking-[0.18em]">살림이 하는 일</span>
+          </div>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <div class="rule mb-8"></div>
+          <h2 class="font-display font-bold text-ink-950 text-[34px] sm:text-[44px] leading-[1.15] tracking-tight">
+            가정교회의 모든 운영,<br>한 곳에서.
+          </h2>
+        </div>
       </div>
-      <p class="text-xs text-stone-400">&copy; 2026 프리실라. All rights reserved.</p>
+
+      <!-- 01. 목장 — Featured wide card -->
+      <div class="reveal feature-card surface rounded-3xl p-8 sm:p-12 mb-5 grid grid-cols-12 gap-8 items-center overflow-hidden">
+        <div class="col-span-12 md:col-span-5">
+          <div class="flex items-baseline gap-3 mb-5">
+            <span class="chapter-num font-display text-[22px]">01</span>
+            <span class="text-[11px] text-ink-400 uppercase tracking-[0.18em]">Mokjang</span>
+          </div>
+          <h3 class="font-display font-bold text-ink-950 text-[32px] sm:text-[40px] leading-[1.15] tracking-tight mb-4">
+            목장
+          </h3>
+          <p class="text-ink-600 text-[15px] leading-relaxed mb-3">
+            6명에서 12명, 한 가정에서 시작된 작은 교회.
+          </p>
+          <p class="text-ink-500 text-[14px] leading-[1.8]">
+            목원 명단, 매주 모임 기록, 나눔, 출석, 기도제목을 한 곳에서.
+            오늘 목장 모임에서 나눌 이야기까지 한눈에.
+          </p>
+        </div>
+
+        <!-- Mockup: 목장 모임 기록 -->
+        <div class="col-span-12 md:col-span-7">
+          <div class="mockup-frame rounded-2xl p-5 sm:p-6">
+            <div class="bg-white rounded-xl border border-line-soft overflow-hidden">
+              <div class="px-5 py-3 border-b border-line-soft flex items-center justify-between">
+                <div class="flex items-baseline gap-2">
+                  <span class="font-display font-bold text-ink-900 text-[15px]">3목장</span>
+                  <span class="text-[11px] text-ink-400">· 김영수 목자</span>
+                </div>
+                <span class="text-[11px] text-ink-400 tnum">2026.05.10 · 8명 모임</span>
+              </div>
+              <div class="divide-y divide-line-soft">
+                <div class="px-5 py-3 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-seal-100 rounded-full flex items-center justify-center text-[11px] font-bold text-seal-600 font-display">김</div>
+                  <div class="flex-1">
+                    <div class="text-[13px] font-medium text-ink-800">김영수</div>
+                    <div class="text-[10px] text-ink-400">목자 · 3목장</div>
+                  </div>
+                  <span class="tag bg-seal-50 text-seal-600">목자</span>
+                </div>
+                <div class="px-5 py-3 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-paper-100 rounded-full flex items-center justify-center text-[11px] font-bold text-ink-600 font-display">박</div>
+                  <div class="flex-1">
+                    <div class="text-[13px] font-medium text-ink-800">박지영 · 박민호</div>
+                    <div class="text-[10px] text-ink-400">목원 가정 · 자녀 2</div>
+                  </div>
+                  <span class="tag bg-paper-100 text-ink-600">출석</span>
+                </div>
+                <div class="px-5 py-3 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-paper-100 rounded-full flex items-center justify-center text-[11px] font-bold text-ink-600 font-display">이</div>
+                  <div class="flex-1">
+                    <div class="text-[13px] font-medium text-ink-800">이수경</div>
+                    <div class="text-[10px] text-ink-400">목원 · 새가족 양육 중</div>
+                  </div>
+                  <span class="tag bg-paper-100 text-ink-600">출석</span>
+                </div>
+                <div class="px-5 py-3 flex items-center gap-3">
+                  <div class="w-8 h-8 bg-seal-100/60 rounded-full flex items-center justify-center text-[11px] font-bold text-seal-600 font-display">최</div>
+                  <div class="flex-1">
+                    <div class="text-[13px] font-medium text-ink-800">최성훈</div>
+                    <div class="text-[10px] text-ink-400">VIP · 3주째 출석</div>
+                  </div>
+                  <span class="tag bg-seal-50 text-seal-600">VIP</span>
+                </div>
+              </div>
+              <div class="px-5 py-3 bg-paper-50/60 border-t border-line-soft">
+                <div class="text-[11px] text-ink-500 mb-1">이번 주 나눔 · 김영수 목자</div>
+                <div class="text-[12px] text-ink-700 italic leading-relaxed">"최성훈 형제가 처음으로 기도제목을 나누었습니다. 회사 일로 지쳐 있던 마음을…"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 / 03 row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+
+        <!-- 02. VIP -->
+        <div class="reveal feature-card surface rounded-3xl p-8 sm:p-10 overflow-hidden">
+          <div class="flex items-baseline gap-3 mb-5">
+            <span class="chapter-num font-display text-[22px]">02</span>
+            <span class="text-[11px] text-ink-400 uppercase tracking-[0.18em]">VIP</span>
+          </div>
+          <h3 class="font-display font-bold text-ink-950 text-[28px] leading-[1.15] tracking-tight mb-3">
+            한 영혼을 끝까지.
+          </h3>
+          <p class="text-ink-500 text-[14px] leading-[1.8] mb-6">
+            첫 만남부터 등록·새가족·침례·세례까지.
+            한 분도 잊혀지지 않도록, 살림이 함께 기억합니다.
+          </p>
+
+          <!-- VIP journey mockup -->
+          <div class="mockup-frame rounded-2xl p-4">
+            <div class="bg-white rounded-xl border border-line-soft p-4">
+              <div class="text-[11px] font-medium text-ink-600 mb-3">최성훈 형제 · 3목장</div>
+              <div class="space-y-2.5">
+                <div class="flex items-center gap-3">
+                  <span class="stage-dot bg-seal-500"></span>
+                  <div class="flex-1 flex items-center justify-between">
+                    <span class="text-[12px] text-ink-700">첫 만남</span>
+                    <span class="text-[10px] text-ink-400 tnum">04.18</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="stage-dot bg-seal-500"></span>
+                  <div class="flex-1 flex items-center justify-between">
+                    <span class="text-[12px] text-ink-700">목장 첫 방문</span>
+                    <span class="text-[10px] text-ink-400 tnum">04.25</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="stage-dot bg-seal-500"></span>
+                  <div class="flex-1 flex items-center justify-between">
+                    <span class="text-[12px] text-ink-700 font-medium">3주 연속 출석</span>
+                    <span class="text-[10px] text-seal-500 font-medium">현재</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 opacity-50">
+                  <span class="stage-dot bg-line"></span>
+                  <div class="flex-1 flex items-center justify-between">
+                    <span class="text-[12px] text-ink-500">새가족 양육</span>
+                    <span class="text-[10px] text-ink-400">예정</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 opacity-40">
+                  <span class="stage-dot bg-line"></span>
+                  <span class="text-[12px] text-ink-500">등록 · 침례/세례</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 03. 삶공부 -->
+        <div class="reveal feature-card surface rounded-3xl p-8 sm:p-10 overflow-hidden">
+          <div class="flex items-baseline gap-3 mb-5">
+            <span class="chapter-num font-display text-[22px]">03</span>
+            <span class="text-[11px] text-ink-400 uppercase tracking-[0.18em]">Life Study</span>
+          </div>
+          <h3 class="font-display font-bold text-ink-950 text-[28px] leading-[1.15] tracking-tight mb-3">
+            삶공부
+          </h3>
+          <p class="text-ink-500 text-[14px] leading-[1.8] mb-6">
+            생명의 삶부터 경건의 삶까지.
+            누가 어디까지 왔는지, 누가 멈춰 있는지 한눈에.
+          </p>
+
+          <!-- Curriculum progress mockup -->
+          <div class="mockup-frame rounded-2xl p-4">
+            <div class="bg-white rounded-xl border border-line-soft p-4 space-y-3.5">
+              <div>
+                <div class="flex justify-between items-baseline mb-1.5">
+                  <span class="text-[12px] font-medium text-ink-800">생명의 삶</span>
+                  <span class="text-[10px] text-ink-400 tnum">24 / 28명 수료</span>
+                </div>
+                <div class="pbar h-1.5"><span style="width: 86%"></span></div>
+              </div>
+              <div>
+                <div class="flex justify-between items-baseline mb-1.5">
+                  <span class="text-[12px] font-medium text-ink-800">새로운 삶</span>
+                  <span class="text-[10px] text-ink-400 tnum">18 / 28명 수료</span>
+                </div>
+                <div class="pbar h-1.5"><span style="width: 64%"></span></div>
+              </div>
+              <div>
+                <div class="flex justify-between items-baseline mb-1.5">
+                  <span class="text-[12px] font-medium text-ink-800">경건의 삶</span>
+                  <span class="text-[10px] text-ink-400 tnum">12 / 28명 수료</span>
+                </div>
+                <div class="pbar h-1.5"><span style="width: 43%"></span></div>
+              </div>
+              <div>
+                <div class="flex justify-between items-baseline mb-1.5">
+                  <span class="text-[12px] font-medium text-ink-800">하나님을 경험하는 삶</span>
+                  <span class="text-[10px] text-ink-400 tnum">5 / 28명 수료</span>
+                </div>
+                <div class="pbar h-1.5"><span style="width: 18%"></span></div>
+              </div>
+              <div class="pt-2 mt-2 border-t border-line-soft text-[11px] text-ink-500">
+                이번 분기 다음 단계 대상자 <span class="font-semibold text-seal-500">6명</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 / 05 row -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-5">
+
+        <!-- 04. 초원 -->
+        <div class="reveal feature-card surface rounded-3xl p-8 sm:p-10 md:col-span-3 overflow-hidden">
+          <div class="flex items-baseline gap-3 mb-5">
+            <span class="chapter-num font-display text-[22px]">04</span>
+            <span class="text-[11px] text-ink-400 uppercase tracking-[0.18em]">Chowon</span>
+          </div>
+          <h3 class="font-display font-bold text-ink-950 text-[28px] leading-[1.15] tracking-tight mb-3">
+            초원
+          </h3>
+          <p class="text-ink-500 text-[14px] leading-[1.8] mb-6 max-w-md">
+            흩어진 목장을 함께 살핍니다.
+            초원지기가 자신의 초원에 속한 목장들을 한눈에 보고,
+            보고서를 모으고, 기도제목을 함께 나눕니다.
+          </p>
+
+          <!-- Chowon hierarchy mockup -->
+          <div class="mockup-frame rounded-2xl p-5">
+            <div class="bg-white rounded-xl border border-line-soft p-4">
+              <div class="flex items-center gap-2 mb-3 pb-3 border-b border-line-soft">
+                <span class="font-display font-bold text-ink-900 text-[14px]">은혜 초원</span>
+                <span class="text-[10px] text-ink-400">· 정현주 초원지기</span>
+                <span class="ml-auto text-[10px] text-ink-400 tnum">목장 5 · 38명</span>
+              </div>
+              <div class="grid grid-cols-5 gap-2">
+                <div class="bg-paper-50 rounded-lg p-2.5 text-center">
+                  <div class="text-[10px] text-ink-500 mb-1">1목장</div>
+                  <div class="text-[13px] font-bold text-ink-800 tnum">7</div>
+                  <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                </div>
+                <div class="bg-paper-50 rounded-lg p-2.5 text-center">
+                  <div class="text-[10px] text-ink-500 mb-1">2목장</div>
+                  <div class="text-[13px] font-bold text-ink-800 tnum">9</div>
+                  <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                </div>
+                <div class="bg-paper-50 rounded-lg p-2.5 text-center">
+                  <div class="text-[10px] text-ink-500 mb-1">3목장</div>
+                  <div class="text-[13px] font-bold text-ink-800 tnum">8</div>
+                  <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                </div>
+                <div class="bg-paper-50 rounded-lg p-2.5 text-center">
+                  <div class="text-[10px] text-ink-500 mb-1">4목장</div>
+                  <div class="text-[13px] font-bold text-ink-800 tnum">6</div>
+                  <div class="h-0.5 bg-seal-200 mt-1.5 rounded-full"></div>
+                </div>
+                <div class="bg-paper-50 rounded-lg p-2.5 text-center">
+                  <div class="text-[10px] text-ink-500 mb-1">5목장</div>
+                  <div class="text-[13px] font-bold text-ink-800 tnum">8</div>
+                  <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                </div>
+              </div>
+              <div class="mt-3 pt-3 border-t border-line-soft flex items-center justify-between text-[11px]">
+                <span class="text-ink-500">이번 주 보고 완료</span>
+                <span class="text-ink-800 font-medium tnum">4 / 5 목장</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 05. 교회 행정 -->
+        <div class="reveal feature-card surface-warm rounded-3xl p-8 sm:p-10 md:col-span-2 overflow-hidden flex flex-col">
+          <div class="flex items-baseline gap-3 mb-5">
+            <span class="chapter-num font-display text-[22px]">05</span>
+            <span class="text-[11px] text-ink-400 uppercase tracking-[0.18em]">Admin</span>
+          </div>
+          <h3 class="font-display font-bold text-ink-950 text-[28px] leading-[1.15] tracking-tight mb-3">
+            그 외, 교회 행정의 기본.
+          </h3>
+          <p class="text-ink-500 text-[14px] leading-[1.8] mb-6">
+            교적, 헌금, 예배 출석, 기부금영수증 — 더 이상 별도의 행정 시스템이 필요 없습니다.
+          </p>
+
+          <div class="mt-auto space-y-2">
+            <div class="flex items-center justify-between py-2.5 px-4 bg-white rounded-xl border border-line-soft">
+              <span class="text-[13px] text-ink-700">교적·교인 관리</span>
+              <span class="text-[11px] text-ink-400">포함</span>
+            </div>
+            <div class="flex items-center justify-between py-2.5 px-4 bg-white rounded-xl border border-line-soft">
+              <span class="text-[13px] text-ink-700">헌금·기부금영수증</span>
+              <span class="text-[11px] text-ink-400">포함</span>
+            </div>
+            <div class="flex items-center justify-between py-2.5 px-4 bg-white rounded-xl border border-line-soft">
+              <span class="text-[13px] text-ink-700">예배 출석</span>
+              <span class="text-[11px] text-ink-400">포함</span>
+            </div>
+            <div class="flex items-center justify-between py-2.5 px-4 bg-white rounded-xl border border-line-soft">
+              <span class="text-[13px] text-ink-700">교회 통계·보고</span>
+              <span class="text-[11px] text-ink-400">포함</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- App preview — slideshow                       -->
+  <!-- ============================================ -->
+  <section class="relative px-6 sm:px-10 py-24 sm:py-32 border-t border-line-soft">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Eyebrow only (no H2) -->
+      <div class="reveal flex items-baseline gap-2.5 mb-6">
+        <span class="text-[11px] tnum text-ink-500 font-semibold tracking-wider">03</span>
+        <span class="w-5 h-px bg-line"></span>
+        <span class="text-[12px] text-ink-500 uppercase tracking-[0.18em]">미리보기</span>
+      </div>
+      <div class="reveal rule mb-10"></div>
+
+      <!-- Tab nav -->
+      <div class="reveal flex flex-wrap gap-2 mb-6">
+        <button type="button" class="slide-tab is-active" data-slide="0">목장 현황</button>
+        <button type="button" class="slide-tab" data-slide="1">VIP 보드</button>
+        <button type="button" class="slide-tab" data-slide="2">삶공부</button>
+        <button type="button" class="slide-tab" data-slide="3">초원</button>
+      </div>
+
+      <!-- App shell mockup with slide stack -->
+      <div class="reveal rounded-3xl overflow-hidden surface">
+        <div class="mockup-frame aspect-[16/10] sm:aspect-[2/1] flex items-center justify-center p-6 sm:p-10">
+          <div class="w-full h-full bg-white/95 rounded-2xl shadow-[0_20px_60px_-20px_rgba(58,47,30,0.18)] border border-line-soft overflow-hidden flex">
+
+            <!-- Sidebar (shared) -->
+            <div class="w-52 bg-paper-50/80 border-r border-line-soft p-4 hidden sm:flex flex-col">
+              <div class="flex items-center mb-6">
+                <span class="font-display font-bold text-ink-900 text-[15px]">살림<span class="text-seal-500">.</span></span>
+              </div>
+              <div class="text-[10px] text-ink-400 mb-3 uppercase tracking-wider">은혜교회</div>
+              <div class="space-y-0.5">
+                <div class="side-item is-active" data-side="0"><div class="ic"></div>목장</div>
+                <div class="side-item" data-side="1"><div class="ic"></div>VIP</div>
+                <div class="side-item" data-side="2"><div class="ic"></div>삶공부</div>
+                <div class="side-item" data-side="3"><div class="ic"></div>초원</div>
+                <div class="my-2 mx-2 h-px bg-line-soft"></div>
+                <div class="side-item"><div class="ic"></div>교적</div>
+                <div class="side-item"><div class="ic"></div>헌금</div>
+                <div class="side-item"><div class="ic"></div>예배 출석</div>
+              </div>
+              <div class="mt-auto pt-3 border-t border-line-soft">
+                <div class="text-[10px] text-ink-400">담임 권한</div>
+                <div class="text-[12px] font-medium text-ink-800 mt-0.5">박성호 목사</div>
+              </div>
+            </div>
+
+            <!-- Main: stacked slides -->
+            <div class="flex-1 relative">
+
+              <!-- ── Slide 0: 목장 현황 ─────────────────── -->
+              <div class="preview-slide is-active" data-slide="0">
+                <div class="flex items-center justify-between mb-5">
+                  <div>
+                    <div class="text-[10px] text-ink-400 mb-1">목장 / 전체 목록</div>
+                    <div class="font-display font-bold text-ink-900 text-[18px]">은혜교회 목장 현황</div>
+                  </div>
+                  <div class="text-[10px] text-ink-500 bg-paper-50 border border-line-soft px-2.5 py-1.5 rounded-md">2026년 2분기</div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-3 mb-5">
+                  <div class="bg-paper-50/60 border border-line-soft rounded-lg p-3">
+                    <div class="text-[10px] text-ink-500 mb-1">총 목장</div>
+                    <div class="text-[20px] font-bold text-ink-900 font-display tnum">14</div>
+                  </div>
+                  <div class="bg-paper-50/60 border border-line-soft rounded-lg p-3">
+                    <div class="text-[10px] text-ink-500 mb-1">목원</div>
+                    <div class="text-[20px] font-bold text-ink-900 font-display tnum">128</div>
+                  </div>
+                  <div class="bg-paper-50/60 border border-line-soft rounded-lg p-3">
+                    <div class="text-[10px] text-ink-500 mb-1">VIP</div>
+                    <div class="text-[20px] font-bold text-seal-500 font-display tnum">22</div>
+                  </div>
+                  <div class="bg-paper-50/60 border border-line-soft rounded-lg p-3">
+                    <div class="text-[10px] text-ink-500 mb-1">이번 분기 침례/세례</div>
+                    <div class="text-[20px] font-bold text-ink-900 font-display tnum">3</div>
+                  </div>
+                </div>
+
+                <div class="border border-line-soft rounded-lg overflow-hidden">
+                  <div class="flex items-center gap-3 px-4 py-2 bg-paper-50/60 text-[10px] text-ink-500 font-medium uppercase tracking-wider">
+                    <span class="w-10">목장</span>
+                    <span class="flex-1">목자</span>
+                    <span class="w-16">목원</span>
+                    <span class="w-14">VIP</span>
+                    <span class="w-20">최근 모임</span>
+                    <span class="w-14 text-right">상태</span>
+                  </div>
+                  <div class="divide-y divide-line-soft bg-white">
+                    <div class="flex items-center gap-3 px-4 py-2.5 text-[12px]">
+                      <span class="w-10 font-medium text-ink-900 font-display">1</span>
+                      <span class="flex-1 text-ink-700">이정훈 · 김혜진</span>
+                      <span class="w-16 tnum text-ink-600">7명</span>
+                      <span class="w-14 tnum text-seal-500 font-medium">2</span>
+                      <span class="w-20 text-ink-500 tnum">05.10</span>
+                      <span class="w-14 text-right"><span class="tag bg-seal-50 text-seal-600">활발</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 px-4 py-2.5 text-[12px]">
+                      <span class="w-10 font-medium text-ink-900 font-display">2</span>
+                      <span class="flex-1 text-ink-700">정민호 · 박수연</span>
+                      <span class="w-16 tnum text-ink-600">9명</span>
+                      <span class="w-14 tnum text-seal-500 font-medium">3</span>
+                      <span class="w-20 text-ink-500 tnum">05.10</span>
+                      <span class="w-14 text-right"><span class="tag bg-seal-50 text-seal-600">활발</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 px-4 py-2.5 text-[12px] bg-paper-50/40">
+                      <span class="w-10 font-medium text-ink-900 font-display">3</span>
+                      <span class="flex-1 text-ink-700">김영수 · 한미경</span>
+                      <span class="w-16 tnum text-ink-600">8명</span>
+                      <span class="w-14 tnum text-seal-500 font-medium">1</span>
+                      <span class="w-20 text-ink-500 tnum">05.10</span>
+                      <span class="w-14 text-right"><span class="tag bg-seal-50 text-seal-600">활발</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 px-4 py-2.5 text-[12px]">
+                      <span class="w-10 font-medium text-ink-900 font-display">4</span>
+                      <span class="flex-1 text-ink-700">박순영 · 임재현</span>
+                      <span class="w-16 tnum text-ink-600">6명</span>
+                      <span class="w-14 tnum text-ink-400">0</span>
+                      <span class="w-20 text-ink-400 tnum">05.03</span>
+                      <span class="w-14 text-right"><span class="tag bg-paper-100 text-ink-500">주의</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 px-4 py-2.5 text-[12px]">
+                      <span class="w-10 font-medium text-ink-900 font-display">5</span>
+                      <span class="flex-1 text-ink-700">최은경 · 윤상호</span>
+                      <span class="w-16 tnum text-ink-600">8명</span>
+                      <span class="w-14 tnum text-seal-500 font-medium">2</span>
+                      <span class="w-20 text-ink-500 tnum">05.10</span>
+                      <span class="w-14 text-right"><span class="tag bg-seal-50 text-seal-600">활발</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── Slide 1: VIP 보드 ─────────────────── -->
+              <div class="preview-slide" data-slide="1">
+                <div class="flex items-center justify-between mb-5">
+                  <div>
+                    <div class="text-[10px] text-ink-400 mb-1">VIP / 전도 여정</div>
+                    <div class="font-display font-bold text-ink-900 text-[18px]">은혜교회 VIP 현황</div>
+                  </div>
+                  <div class="text-[10px] text-ink-500 bg-paper-50 border border-line-soft px-2.5 py-1.5 rounded-md">총 22명</div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-3 h-[calc(100%-3.5rem)]">
+
+                  <div class="bg-paper-50/40 border border-line-soft rounded-lg p-3 flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="text-[11px] font-medium text-ink-700">첫 만남</span>
+                      <span class="text-[10px] text-ink-400 tnum">5</span>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                      <div class="vip-card">
+                        <div class="text-[11px] font-medium text-ink-800">김지영</div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">1목장 · 3주 전</div>
+                      </div>
+                      <div class="vip-card">
+                        <div class="text-[11px] font-medium text-ink-800">박철수</div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">2목장 · 1주 전</div>
+                      </div>
+                      <div class="vip-card">
+                        <div class="text-[11px] font-medium text-ink-800">이수연</div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">5목장 · 5일 전</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-paper-50/40 border border-line-soft rounded-lg p-3 flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="text-[11px] font-medium text-ink-700">출석 시작</span>
+                      <span class="text-[10px] text-ink-400 tnum">8</span>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                      <div class="vip-card hi">
+                        <div class="flex items-center gap-1.5">
+                          <span class="text-[11px] font-medium text-ink-800">최성훈</span>
+                          <span class="text-[9px] text-seal-500 font-medium">3주째</span>
+                        </div>
+                        <div class="text-[10px] text-ink-500 mt-0.5">3목장 · 김영수 목자</div>
+                      </div>
+                      <div class="vip-card">
+                        <div class="text-[11px] font-medium text-ink-800">한성민</div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">1목장 · 2주째</div>
+                      </div>
+                      <div class="vip-card">
+                        <div class="text-[11px] font-medium text-ink-800">임재경</div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">4목장 · 2주째</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-paper-50/40 border border-line-soft rounded-lg p-3 flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="text-[11px] font-medium text-ink-700">새가족 양육</span>
+                      <span class="text-[10px] text-ink-400 tnum">4</span>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                      <div class="vip-card">
+                        <div class="text-[11px] font-medium text-ink-800">윤민호</div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">5목장 · 3주차</div>
+                      </div>
+                      <div class="vip-card">
+                        <div class="text-[11px] font-medium text-ink-800">오은영</div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">2목장 · 1주차</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-paper-50/40 border border-line-soft rounded-lg p-3 flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="text-[11px] font-medium text-ink-700">등록·침례/세례</span>
+                      <span class="text-[10px] text-ink-400 tnum">3</span>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                      <div class="vip-card">
+                        <div class="flex items-center gap-1.5">
+                          <span class="text-[11px] font-medium text-ink-800">송지윤</span>
+                          <span class="text-[9px] text-seal-500 font-medium">완료</span>
+                        </div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">2목장 · 05.04 침례</div>
+                      </div>
+                      <div class="vip-card">
+                        <div class="text-[11px] font-medium text-ink-800">박정민</div>
+                        <div class="text-[10px] text-ink-400 mt-0.5">1목장 · 05.11 예정</div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- ── Slide 2: 삶공부 ─────────────────── -->
+              <div class="preview-slide" data-slide="2">
+                <div class="flex items-center justify-between mb-5">
+                  <div>
+                    <div class="text-[10px] text-ink-400 mb-1">삶공부 / 진도 현황</div>
+                    <div class="font-display font-bold text-ink-900 text-[18px]">2026년 2분기 진도</div>
+                  </div>
+                  <div class="text-[10px] text-seal-600 bg-seal-50 border border-seal-100 px-2.5 py-1.5 rounded-md">다음 단계 대상 6명</div>
+                </div>
+
+                <div class="border border-line-soft rounded-lg overflow-hidden bg-white">
+                  <div class="flex items-center gap-3 px-4 py-2 bg-paper-50/60 text-[10px] text-ink-500 font-medium uppercase tracking-wider">
+                    <span class="flex-1">과정</span>
+                    <span class="w-32">진도</span>
+                    <span class="w-20">수료</span>
+                    <span class="w-24">진행 중</span>
+                    <span class="w-16 text-right">상태</span>
+                  </div>
+                  <div class="divide-y divide-line-soft">
+                    <div class="flex items-center gap-3 px-4 py-3 text-[12px]">
+                      <span class="flex-1 font-medium text-ink-800">생명의 삶</span>
+                      <span class="w-32"><span class="pbar h-1.5 block"><span style="width: 86%"></span></span></span>
+                      <span class="w-20 tnum text-ink-600">24 / 28명</span>
+                      <span class="w-24 tnum text-ink-600">4명</span>
+                      <span class="w-16 text-right"><span class="tag bg-seal-50 text-seal-600">활발</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 px-4 py-3 text-[12px]">
+                      <span class="flex-1 font-medium text-ink-800">새로운 삶</span>
+                      <span class="w-32"><span class="pbar h-1.5 block"><span style="width: 64%"></span></span></span>
+                      <span class="w-20 tnum text-ink-600">18 / 28명</span>
+                      <span class="w-24 tnum text-ink-600">6명</span>
+                      <span class="w-16 text-right"><span class="tag bg-seal-50 text-seal-600">활발</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 px-4 py-3 text-[12px]">
+                      <span class="flex-1 font-medium text-ink-800">경건의 삶</span>
+                      <span class="w-32"><span class="pbar h-1.5 block"><span style="width: 43%"></span></span></span>
+                      <span class="w-20 tnum text-ink-600">12 / 28명</span>
+                      <span class="w-24 tnum text-ink-600">4명</span>
+                      <span class="w-16 text-right"><span class="tag bg-seal-50 text-seal-600">활발</span></span>
+                    </div>
+                    <div class="flex items-center gap-3 px-4 py-3 text-[12px]">
+                      <span class="flex-1 font-medium text-ink-800">하나님을 경험하는 삶</span>
+                      <span class="w-32"><span class="pbar h-1.5 block"><span style="width: 18%"></span></span></span>
+                      <span class="w-20 tnum text-ink-600">5 / 28명</span>
+                      <span class="w-24 tnum text-ink-400">대기</span>
+                      <span class="w-16 text-right"><span class="tag bg-paper-100 text-ink-500">예정</span></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 px-4 py-3 bg-paper-50/60 border border-line-soft rounded-lg flex items-center gap-3">
+                  <div class="w-6 h-6 bg-seal-100 rounded-full flex items-center justify-center text-seal-600 text-[11px] font-bold">!</div>
+                  <div class="text-[12px] text-ink-700">
+                    이번 분기 다음 단계 진학 가능한 목원 <span class="font-semibold text-seal-600">6명</span>이 있습니다.
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── Slide 3: 초원 ─────────────────── -->
+              <div class="preview-slide" data-slide="3">
+                <div class="flex items-center justify-between mb-5">
+                  <div>
+                    <div class="text-[10px] text-ink-400 mb-1">초원 / 전체 목록</div>
+                    <div class="font-display font-bold text-ink-900 text-[18px]">은혜교회 초원 현황</div>
+                  </div>
+                  <div class="text-[10px] text-ink-500 bg-paper-50 border border-line-soft px-2.5 py-1.5 rounded-md">초원 3 · 목장 14</div>
+                </div>
+
+                <div class="space-y-3">
+                  <!-- 은혜 초원 -->
+                  <div class="bg-white border border-line-soft rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="flex items-baseline gap-2">
+                        <span class="font-display font-bold text-ink-900 text-[14px]">은혜 초원</span>
+                        <span class="text-[11px] text-ink-500">· 정현주 초원지기</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-ink-400 tnum">목장 5 · 38명</span>
+                        <span class="tag bg-seal-50 text-seal-600">보고 4/5</span>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2">
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">1목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">7명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">2목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">9명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">3목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">8명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">4목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">6명</div>
+                        <div class="h-0.5 bg-line mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">5목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">8명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 평안 초원 -->
+                  <div class="bg-white border border-line-soft rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="flex items-baseline gap-2">
+                        <span class="font-display font-bold text-ink-900 text-[14px]">평안 초원</span>
+                        <span class="text-[11px] text-ink-500">· 김상호 초원지기</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-ink-400 tnum">목장 4 · 31명</span>
+                        <span class="tag bg-seal-50 text-seal-600">보고 4/4</span>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2">
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">6목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">8명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">7목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">7명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">8목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">8명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">9목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">8명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="rounded p-2"></div>
+                    </div>
+                  </div>
+
+                  <!-- 소망 초원 -->
+                  <div class="bg-white border border-line-soft rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="flex items-baseline gap-2">
+                        <span class="font-display font-bold text-ink-900 text-[14px]">소망 초원</span>
+                        <span class="text-[11px] text-ink-500">· 박미경 초원지기</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-ink-400 tnum">목장 5 · 59명</span>
+                        <span class="tag bg-paper-100 text-ink-500">보고 3/5</span>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2">
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">10목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">12명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">11목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">10명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">12목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">14명</div>
+                        <div class="h-0.5 bg-line mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">13목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">11명</div>
+                        <div class="h-0.5 bg-seal-500 mt-1.5 rounded-full"></div>
+                      </div>
+                      <div class="bg-paper-50/60 rounded p-2 text-center">
+                        <div class="text-[9px] text-ink-500 mb-0.5">14목장</div>
+                        <div class="text-[12px] font-bold text-ink-800 tnum">12명</div>
+                        <div class="h-0.5 bg-line mt-1.5 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- Bottom CTA                                    -->
+  <!-- ============================================ -->
+  <section id="request" class="px-6 sm:px-10 py-24 sm:py-32">
+    <div class="max-w-5xl mx-auto">
+      <div class="reveal relative bg-ink-950 rounded-[28px] px-8 sm:px-16 py-20 sm:py-28 overflow-hidden">
+
+        <!-- Soft ambient glow -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-seal-500/12 rounded-full blur-[140px]"></div>
+        </div>
+
+        <!-- Wordmark anchor -->
+        <div class="absolute top-10 right-10 sm:top-14 sm:right-16 opacity-95">
+          <div class="font-display font-bold text-[56px] sm:text-[72px] text-paper-50 leading-none tracking-tight">
+            살림<span class="text-seal-400">.</span>
+          </div>
+        </div>
+
+        <div class="relative z-10 max-w-2xl">
+          <div class="flex items-baseline gap-2.5 mb-3">
+            <span class="text-[11px] tnum text-paper-300 font-semibold tracking-wider">04</span>
+            <span class="w-5 h-px bg-paper-300/40"></span>
+            <span class="text-[12px] text-paper-300 uppercase tracking-[0.18em]">시작</span>
+          </div>
+          <div class="rule mb-8 opacity-30"></div>
+
+          <h2 class="font-display font-bold text-paper-50 text-[36px] sm:text-[52px] leading-[1.12] tracking-tight mb-6">
+            가정교회의 곁에서,<br>살림이 함께합니다.
+          </h2>
+          <p class="text-paper-300 text-[16px] leading-relaxed max-w-lg mb-10">
+            한 영혼을 끝까지 돌보는 사역에 더 집중할 수 있도록,
+            번거로운 행정은 살림이 맡겠습니다.
+          </p>
+
+          <form id="bottom-form" class="flex flex-col sm:flex-row gap-3 max-w-md mb-3" onsubmit="handleSubmit(event, this)">
+            <input type="email" required placeholder="목회자 이메일 주소"
+                   class="email-input flex-1 bg-white/[0.06] border border-white/15 rounded-xl px-4 py-3.5 text-[14px] text-paper-50 placeholder:text-ink-400">
+            <button type="submit" class="whitespace-nowrap bg-seal-500 hover:bg-seal-400 text-paper-50 text-[14px] font-semibold px-6 py-3.5 rounded-xl transition-colors inline-flex items-center justify-center gap-2">
+              사용 신청
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+              </svg>
+            </button>
+          </form>
+          <p class="text-ink-400 text-[12px]">
+            신청 순서대로 초청해 드립니다. 도입 상담은 무료입니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- Footer                                        -->
+  <!-- ============================================ -->
+  <footer class="px-6 sm:px-10 py-14 border-t border-line-soft">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 items-end">
+      <div class="flex items-center">
+        <span class="font-display font-bold text-ink-900 text-[18px]">살림<span class="text-seal-500">.</span></span>
+      </div>
+      <div class="text-center">
+        <p class="font-display italic text-ink-500 text-[13px] leading-relaxed">
+          "교회를 교회되게."
+        </p>
+      </div>
+      <div class="text-right">
+        <a href="mailto:hello@sallim.app" class="text-[13px] text-ink-500 hover:text-ink-800 transition-colors">hello@sallim.app</a>
+        <p class="text-[11px] text-ink-400 mt-1 tnum">&copy; 2026 살림 · All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
@@ -535,33 +1213,45 @@
   <!-- ============================================ -->
   <script>
     // Scroll reveal
-    const revealElements = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    revealElements.forEach(el => revealObserver.observe(el));
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+    revealEls.forEach((el) => io.observe(el));
 
-    // Google Sheets Apps Script endpoint
+    // Preview slideshow
+    const slideTabs = document.querySelectorAll('.slide-tab');
+    const previewSlides = document.querySelectorAll('.preview-slide');
+    const sideItems = document.querySelectorAll('.side-item[data-side]');
+    slideTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.slide;
+        slideTabs.forEach((t) => t.classList.toggle('is-active', t.dataset.slide === target));
+        previewSlides.forEach((s) => s.classList.toggle('is-active', s.dataset.slide === target));
+        sideItems.forEach((item) => item.classList.toggle('is-active', item.dataset.side === target));
+      });
+    });
+
+    // Google Sheets Apps Script endpoint (preserved from previous)
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6fNFUQy0oaQ26TJfBUefVyOmJ-FyTFKqlwPTHfJn2_vAEsMuEnhTlq_7FEtYNnuUY/exec';
 
-    // Form submit handler
     async function handleSubmit(e, form) {
       e.preventDefault();
       const email = form.querySelector('input[type="email"]').value;
       const button = form.querySelector('button[type="submit"]');
       const originalHTML = button.innerHTML;
 
-      // Loading state
       button.innerHTML = `
         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
         </svg>
-        신청 중...
+        신청 중…
       `;
       button.disabled = true;
 
@@ -573,23 +1263,21 @@
           body: JSON.stringify({ email })
         });
 
-        // Success state
         button.innerHTML = `
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
           </svg>
-          신청 완료!
+          신청 완료
         `;
-        button.classList.add('opacity-75');
+        button.classList.add('opacity-80');
         form.querySelector('input[type="email"]').value = '';
 
         setTimeout(() => {
           button.innerHTML = originalHTML;
           button.disabled = false;
-          button.classList.remove('opacity-75');
+          button.classList.remove('opacity-80');
         }, 3000);
       } catch (err) {
-        // Error state
         button.innerHTML = '다시 시도해 주세요';
         setTimeout(() => {
           button.innerHTML = originalHTML;
